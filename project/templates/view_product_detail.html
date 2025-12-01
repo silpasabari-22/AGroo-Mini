@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.product_name }} - Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'img/bg.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+
+        .overlay {
+            background: rgba(230, 244, 234, 0.88);
+            display: flex;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container-box {
+            max-width: 900px;
+            background: white;
+            margin: auto;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .left img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #c8e6c9;
+        }
+
+        .right h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 15px 0;
+        }
+
+        .desc {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        .btn-green {
+            background: #388e3c;
+            padding: 12px 20px;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-yellow {
+            background: #efb728;
+            padding: 12px 20px;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-green:hover {
+            background: #1b5e20;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #1b5e20;
+            text-decoration: underline;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay">
+        <div class="container-box">
+
+            <!-- LEFT SIDE IMAGE -->
+            <div class="left">
+                <img src="{{ product.product_image.url }}" alt="Product Image">
+            </div>
+
+            <!-- RIGHT SIDE DETAILS -->
+            <div class="right">
+                <h2>{{ product.product_name }}</h2>
+
+                <div class="price">Price: ₹{{ product.price }}</div>
+
+                <p class="desc">{{ product.description }}</p>
+                <a href="{% url 'cart' product.id %}" class="btn-yellow">Add to cart</a>
+                
+
+                <br><br>
+                <a href="{% url 'user' %}" class="back-btn">← Back to Products</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -53,7 +53,7 @@ urlpatterns = [
     path('product', views.product, name='product'),
     path('order_page/', views.order_page, name='order_page'),
 
-
+    # path('my_orders/', views.my_orders, name='my_orders'),
 
     path('farmer_orders',views.farmer_orders,name='farmer_orders'),
     path('farmer_profile',views.farmer_profile,name='farmer_profile'),

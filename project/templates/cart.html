@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,23 +10,71 @@
         body {
             font-family: Arial, sans-serif;
             background: #f7f7f7;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
         }
 
+        /* ---------------- NAVBAR ---------------- */
+        .navbar {
+            width: 100%;
+            background: #3b82f6;
+            padding: 15px 0px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            
+        }
+
+        .navbar .logo {
+            font-size: 22px;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 7px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            background: #1e40af;
+        }
+
+        /* ---------------- PAGE HEADING ---------------- */
         h2 {
             text-align: center;
-            margin-bottom: 25px;
+            margin: 25px 0;
+            color: #333;
         }
 
+        /* ---------------- CART TABLE ---------------- */
         table {
             width: 90%;
             margin: auto;
             border-collapse: collapse;
             background: white;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             padding: 14px;
             border-bottom: 1px solid #ddd;
             text-align: center;
@@ -37,21 +86,24 @@
         }
 
         tr:hover {
-            background: #f1f1f1;
+            background: #f9f9f9;
         }
 
         .img {
             height: 60px;
-            border-radius: 5px;
+            width: 60px;
+            object-fit: cover;
+            border-radius: 6px;
         }
 
         .qty-btn {
-            padding: 5px 10px;
+            padding: 6px 12px;
             background: #3b82f6;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
         }
 
         .qty-btn:hover {
@@ -59,11 +111,11 @@
         }
 
         .remove-btn {
-            padding: 6px 12px;
+            padding: 6px 14px;
             background: red;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
         }
 
@@ -71,88 +123,116 @@
             background: darkred;
         }
 
+        /* ---------------- TOTAL SECTION ---------------- */
         .total-box {
             width: 90%;
-            margin: 25px auto;
+            margin: 30px auto;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
             font-size: 18px;
             text-align: right;
         }
+
+        .place-order-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .place-order-btn:hover {
+            background: #15803d;
+        }
+
+        .msg {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
     </style>
 </head>
+
 <body>
 
-<h2>Your Cart Items</h2>
+    <!-- ================= NAVBAR ================= -->
+    <div class="navbar">
+        <div class="logo">MyShop</div>
+        <ul>
+            <li><a href="{% url 'user' %}">Home</a></li>
+            <li><a href="{% url 'product' %}">Products</a></li>
+            <li><a href="{% url 'cartview' %}">Cart</a></li>
+            <li><a href="{% url 'order_page' %}">My Orders</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
 
-<table>
-    <tr>
-        <th>Image</th>
-        <th>Product Name</th>
-        <th>Price</th>
-        <th>Total Price</th>
-        <th>Quantity</th>
-        <th>Action</th>
-    </tr>
+    <!-- ================= PAGE HEADING ================= -->
+    <h2>Your Cart Items</h2>
 
-    {% for item in a %}
-    <tr>
-        <td><img class="img" src="{{ item.product_id.product_image.url }}" alt=""></td>
+    <table>
+        <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
 
-        <td>{{ item.product_id.product_name }}</td>
+        {% for item in a %}
+        <tr>
+            <td><img class="img" src="{{ item.product_id.product_image.url }}" alt=""></td>
 
-        <td>₹{{ item.product_id.price }}</td>
+            <td>{{ item.product_id.product_name }}</td>
 
-        <td>₹{{ item.price }}</td>
+            <td>₹{{ item.product_id.price }}</td>
 
+            <td>₹{{ item.price }}</td>
 
-        <!-- Quantity Increase / Decrease -->
-        <td>
-            <a href="{% url 'update_quantity' item.id %}?action=dec">
-                <button class="qty-btn">-</button>
-            </a>
+            <td>
+                <a href="{% url 'update_quantity' item.id %}?action=dec">
+                    <button class="qty-btn">-</button>
+                </a>
 
-            <strong>{{item.quantity}} </strong>
+                <strong style="padding: 0 10px;">{{ item.quantity }}</strong>
 
-            <a href="{% url 'update_quantity' item.id %}?action=inc">
-                <button class="qty-btn">+</button>
-            </a>
-        </td>
+                <a href="{% url 'update_quantity' item.id %}?action=inc">
+                    <button class="qty-btn">+</button>
+                </a>
+            </td>
 
-        <!-- Total Price (price × qty) -->
-     
-
-        <!-- Remove Item -->
-        <td>
-            <a href="{% url 'remove' item.id %}">
-                <button class="remove-btn">Remove</button>
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-
-
-
-<!-- Grand Total Box -->
-<div class="total-box">
-    <strong>Grand Total: </strong> ₹{{ grand_total }}
-     <br><br>
-    <a href="{% url 'place_order' %}">
-        <button class="qty-btn" style="padding: 10px 20px; font-size: 16px;">
-            Place Order
-        </button>
-    </a>
-    <strong>{% if messages %}
-        {% for message in messages %}
-            {{ message }}
+            <td>
+                <a href="{% url 'remove' item.id %}">
+                    <button class="remove-btn">Remove</button>
+                </a>
+            </td>
+        </tr>
         {% endfor %}
-    {% endif %}</strong>
+    </table>
 
-</div>  
-<!-- Simple total calculation -->
+    <!-- ================= TOTAL BOX ================= -->
+    <div class="total-box">
+        <strong>Grand Total:</strong> ₹{{ grand_total }}
+
+        <br><br>
+
+        <a href="{% url 'place_order' %}">
+            <button class="place-order-btn">Place Order</button>
+        </a>
+
+        {% if messages %}
+        {% for message in messages %}
+        <span class="msg">{{ message }}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+
 </body>
+
 </html>

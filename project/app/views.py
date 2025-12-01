@@ -351,7 +351,7 @@ def product(request):
 
 
 def order_page(request):
-    orders = Order.objects.filter(user=request.user).order_by('-date')
+    orders = Order.objects.filter(user_id=request.user).order_by('-date')
 
     order_list = []
     for order in orders:
@@ -362,12 +362,10 @@ def order_page(request):
             "payment_method": order.payment_method,
             "status": order.status,
             "total_amount": order.total_amount,
-            "date": order.created_at,
+            "date": order.date,
         })
 
-    return render(request, "order.html", {"orders": order_list})
-
-
+    return render(request, "orders.html", {"orders": order_list})
 
 
 

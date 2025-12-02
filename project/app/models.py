@@ -63,6 +63,7 @@ class DeliveryAddress(models.Model):
 
 class Order(models.Model):
     user_id = models.ForeignKey(Customuser, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=50)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default="Pending")

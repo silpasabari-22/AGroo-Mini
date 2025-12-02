@@ -190,7 +190,6 @@ def addcart(request, pk):
         user_id=request.user,
         product_id=product
     )
-
     # If already in cart, increase quantity
     if not created:
         cart_item.quantity += 1
@@ -203,11 +202,18 @@ def addcart(request, pk):
 
     return redirect('cartview')
 
-    
+
+
+
 def cartview(request):
-    a=Cart.objects.filter(user_id=request.user.id)
+    a = Cart.objects.filter(user_id=request.user.id)
+
+    # Calculate grand total
+    grand_total = sum(item.price for item in a)
+    return render(request, 'cart.html', {'a': a, 'grand_total': grand_total})
+
     
-    return render(request, 'cart.html', {'a': a})
+
 
 
 def remove_cart_item(request, pk):
@@ -236,13 +242,7 @@ def update_quantity(request, id):
     return redirect('cartview') 
 
 
-def cartview(request):
-    a = Cart.objects.filter(user_id=request.user.id)
 
-    # Calculate grand total
-    grand_total = sum(item.price for item in a)
-
-    return render(request, 'cart.html', {'a': a, 'grand_total': grand_total})
 
 
 def delivery_address(request):
@@ -339,14 +339,9 @@ def place_order(request):
     if not cart_items.exists():
         messages.error(request, "Your cart is empty!")
         return redirect('cartview')
-
     # Continue to checkout steps
     return redirect('delivery_address')
 
-
-def product(request):
-    products = Product.objects.all()
-    return render(request, "product.html", {"products": products})
 
 
 
@@ -359,7 +354,7 @@ def order_page(request):
         order_list.append({
             "id": order.id,
             "items": items,
-            "payment_method": order.payment_method,
+            # "payment_method": order.payment_method,
             "status": order.status,
             "total_amount": order.total_amount,
             "date": order.date,
@@ -368,7 +363,9 @@ def order_page(request):
     return render(request, "orders.html", {"orders": order_list})
 
 
-
+def product(request):
+    products = Product.objects.all()
+    return render(request, "product.html", {"products": products})
 
 
 

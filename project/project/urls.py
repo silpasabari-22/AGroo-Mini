@@ -44,14 +44,23 @@ urlpatterns = [
     path('cartview/', views.cartview, name='cartview'),
     path('remove/<int:pk>/', views.remove_cart_item, name='remove'),
     path('update_quantity/<int:id>/', views.update_quantity, name='update_quantity'),
+
+
     path('place_order/', views.place_order, name='place_order'),
+    path('add_address/', views.add_address, name='add_address'),
     path('save_address/', views.save_address, name='save_address'),
-    path('delivery_address/', views.delivery_address, name='delivery_address'),
-    path('order_summary/', views.order_summary, name='order_summary'),
-    path('payment_options/', views.payment_options, name='payment_options'),
+    path('payment_method/', views.payment_method, name='payment_method'),
     path('payment_success/', views.payment_success, name='payment_success'),
+    path('order_summary/', views.order_summary, name='order_summary'),
+    path('confirm_order/', views.confirm_order, name='confirm_order'),
+    path('my_orders/', views.my_orders, name='my_orders'),
+    path('order_details/<int:order_id>/', views.order_detail_view, name='order_details'),
+
+
+    # path('payment_options/', views.payment_options, name='payment_options'),
+    # path('payment_success/', views.payment_success, name='payment_success'),
     path('product', views.product, name='product'),
-    path('order_page/', views.order_page, name='order_page'),
+    # path('order_page/', views.order_page, name='order_page'),
 
     # path('my_orders/', views.my_orders, name='my_orders'),
 

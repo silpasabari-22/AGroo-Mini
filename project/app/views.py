@@ -216,6 +216,11 @@ def cartview(request):
 
 
 
+
+
+
+
+
 def remove_cart_item(request, pk):
     item = get_object_or_404(Cart, id=pk, user_id=request.user.id)
     item.delete()
@@ -245,122 +250,158 @@ def update_quantity(request, id):
 
 
 
-def delivery_address(request):
-    return render(request, 'delivery_address.html')
+
+
+
+
+
+
+
+# def order_summary(request):
+#     user = request.user
+
+#     # Get user cart
+#     cart_items = Cart.objects.filter(user_id=user)
+#     if not cart_items.exists():
+#         return redirect('cartview')
+
+#     # Get user address
+#     try:
+#         address = DeliveryAddress.objects.get(user=user)
+#     except DeliveryAddress.DoesNotExist:
+#         return redirect('delivery_address')  # Force user to fill address
+
+#     # Calculate totals
+#     subtotal = sum(item.product_id.price * item.quantity for item in cart_items)
+#     shipping = 50
+#     total_amount = subtotal + shipping
+
+#     context = {
+#         'cart_items': cart_items,
+#         'address': address,
+#         'subtotal': subtotal,
+#         'shipping': shipping,
+#         'total_amount': total_amount,
+#     }
+
+#     return render(request, 'order_summary.html', context)
+
+@login_required(login_url='login')
+def place_order(request):
+    return redirect('add_address')
+
+
+@login_required(login_url='login')
+def add_address(request):
+    return render(request, 'add_address.html')
 
 
 @login_required(login_url='login')
 def save_address(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-
     if request.method == 'POST':
-        address, created = DeliveryAddress.objects.get_or_create(user=request.user)
+        DeliveryAddress.objects.create(
+            user=request.user,
+            full_name=request.POST['full_name'],
+            phone=request.POST['phone'],
+            house_no=request.POST['house_no'],
+            street=request.POST['street'],
+            city=request.POST['city'],
+            district=request.POST['district'],
+            pincode=request.POST['pincode'],
+            landmark=request.POST.get('landmark'),
+            alternate_phone=request.POST.get('alternate_phone')
+        )
+        return redirect('payment_method')
 
-        address.full_name = request.POST.get('full_name')
-        address.phone = request.POST.get('phone')
-        address.pincode = request.POST.get('pincode')
-        address.state = request.POST.get('state')
-        address.city = request.POST.get('city')
-        address.house = request.POST.get('house')
-        address.area = request.POST.get('area')
-        address.landmark = request.POST.get('landmark')
-
-        address.save()
-        return redirect('order_summary')
-
-    return render(request, 'delivery_address.html')
+    return redirect('add_address')
 
 
+@login_required(login_url='login')
+def payment_method(request):
+    return render(request, 'payment_method.html')
 
-def order_summary(request):
+
+@login_required(login_url='login')
+def confirm_order(request):
+
     user = request.user
-
-    # Get user cart
     cart_items = Cart.objects.filter(user_id=user)
+    payment_method = request.POST.get('payment_method')
+
     if not cart_items.exists():
-        return redirect('cartview')
+        return redirect('cart_page')
 
-    # Get user address
-    try:
-        address = DeliveryAddress.objects.get(user=user)
-    except DeliveryAddress.DoesNotExist:
-        return redirect('delivery_address')  # Force user to fill address
+    total_amount = sum(item.product_id.price * item.quantity for item in cart_items)
 
-    # Calculate totals
-    subtotal = sum(item.product_id.price * item.quantity for item in cart_items)
-    shipping = 50
-    total_amount = subtotal + shipping
+    print("total_amount:", total_amount)
 
-    context = {
-        'cart_items': cart_items,
-        'address': address,
-        'subtotal': subtotal,
-        'shipping': shipping,
-        'total_amount': total_amount,
-    }
+    order = Order.objects.create(
+        user_id=user,
+        product_id=None,
+        payment_method=payment_method,
+        total_amount=total_amount,
+        status="Pending"
+    )
 
-    return render(request, 'order_summary.html', context)
+    # Create order items
+    for item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            product_id=item.product_id,
+            quantity=item.quantity,
+            price=item.price
+        )
+
+    cart_items.delete()
+
+    return redirect('payment_success')
 
 
+def payment_success(request):
+    return render(request, 'payment_success.html')
 
 
-def payment_options(request):
+@login_required(login_url='login')
+def order_summary(request):
     cart_items = Cart.objects.filter(user_id=request.user)
-    subtotal = sum(item.product_id.price * item.quantity for item in cart_items)
-    shipping = 50
-    total_amount = subtotal + shipping
 
-    if request.method == "POST":
-        method = request.POST.get("payment_method")
+    if not cart_items.exists():
+        return redirect('cart_page')
 
-        # save payment method into session (optional)
-        request.session['payment'] = method  
+    total_amount = sum(item.price * item.quantity for item in cart_items)
 
-        # return redirect('order_success')  # make this page later
+    return render(request, 'order_summary.html', {
+        'cart_items': cart_items,
+        'total_amount': total_amount,
+    })
 
-    return render(request, "payment_options.html", {
-        "total_amount": total_amount
+
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(user_id=request.user).order_by('-date')
+    return render(request, 'my_orders.html', {'orders': orders})
+
+
+def order_detail_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user_id=request.user)
+    order_items = OrderItem.objects.filter(order=order)
+
+    return render(request, 'order_details.html', {
+        'order': order,
+        'order_items': order_items,
     })
 
 
 
 
-def payment_success(request):
-    return render(request, "payment_success.html")
 
 
 
 
-@login_required(login_url='login')
-def place_order(request):
-    cart_items = Cart.objects.filter(user_id=request.user.id)
-
-    if not cart_items.exists():
-        messages.error(request, "Your cart is empty!")
-        return redirect('cartview')
-    # Continue to checkout steps
-    return redirect('delivery_address')
 
 
 
 
-def order_page(request):
-    orders = Order.objects.filter(user_id=request.user).order_by('-date')
-
-    order_list = []
-    for order in orders:
-        items = Order.objects.filter(order=order)
-        order_list.append({
-            "id": order.id,
-            "items": items,
-            # "payment_method": order.payment_method,
-            "status": order.status,
-            "total_amount": order.total_amount,
-            "date": order.date,
-        })
-
-    return render(request, "orders.html", {"orders": order_list})
 
 
 def product(request):

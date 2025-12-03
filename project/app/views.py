@@ -90,8 +90,13 @@ def user_home(request):
 
 
 def category_products(request, category_name):
-    products = Product.objects.filter(product_category=category_name)
-    return render(request, "userhome.html", {"products": products})
+    if category_name == "all":
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(product_category=category_name)
+
+    return render(request, "userhome.html", { "products": products})
+
 
 
 
@@ -105,7 +110,7 @@ def edit_profile(request):
         user.first_name = request.POST.get('first_name')
         user.last_name = request.POST.get('last_name')
         user.email = request.POST.get('email')
-        user.address = request.POST.get('address')
+        user.adress = request.POST.get('address')
         user.phone = request.POST.get('phone')
 
         if 'profile_image' in request.FILES:
@@ -213,12 +218,6 @@ def cartview(request):
     return render(request, 'cart.html', {'a': a, 'grand_total': grand_total})
 
     
-
-
-
-
-
-
 
 
 def remove_cart_item(request, pk):
@@ -395,27 +394,54 @@ def order_detail_view(request, order_id):
 
 
 
-
-
-
-
-
-
-
-
-
 def product(request):
     products = Product.objects.all()
     return render(request, "product.html", {"products": products})
 
 
 
-
+@login_required(login_url='login')
 def farmer_orders(request):
-    return render(request,'farmer_orders.html')
+    farmer = request.user
+
+    # Get all order items that belong to this farmer’s products
+    order_items = OrderItem.objects.filter(product_id__farmer_id=farmer).select_related('order', 'product_id')
+
+    return render(request, 'farmer_orders.html', {
+        'order_items': order_items
+    })
+
+
+@login_required(login_url='login')
+def update_order_status(request, item_id):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+
+        item = OrderItem.objects.get(id=item_id)
+
+        # Update status in OrderItem
+        item.order.status = status
+        item.order.save()
+
+    return redirect('farmer_orders')
+
+
+
+def view_users(request):
+    users = Customuser.objects.filter(users = "user")
+    return render(request, 'view_users.html', {'users': users})
+
+
+
+
+
 
 def farmer_profile(request):
     return render(request,'farmer_profile.html')
 
 def farmer_wallet(request):
     return render(request,'farmer_wallet.html')
+
+
+
+

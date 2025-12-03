@@ -147,6 +147,7 @@
     Category
   </a>
   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <li><a class="dropdown-item" href="{% url 'category_products' 'all' %}">All</a></li>
     <li><a class="dropdown-item" href="{% url 'category_products' 'farming equipments' %}">Farming Equipments</a></li>
     <li><a class="dropdown-item" href="{% url 'category_products' 'fertilizers' %}">Fertilizers</a></li>
     <li><a class="dropdown-item" href="{% url 'category_products' 'plants' %}">Plants</a></li>
@@ -157,10 +158,10 @@
   </ul>
 </li>
                    
-                    <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
+                    
                     <a href="{% url 'cartview' %}" class="nav-item nav-link active">Cart</a>
                     <a href="{% url 'my_orders' %}" class="nav-item nav-link active">MyOrders</a>
-                    <a href="{% url 'contact' %}" class="nav-item nav-link">Contact Us</a>
+                    
                     <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
                 </div>
 

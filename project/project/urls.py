@@ -34,6 +34,7 @@ urlpatterns = [
     path('farmer_home2',views.farmer_home2,name='farmer_home2'),
     path('edit/<int:pk>/', views.edit, name='edit'),
     path('delete/<int:pk>',views.delete,name='delete'),
+    path('category/<str:category_name>/', views.category_products, name='category_products'),
     path('profile/',views.profile,name='profile'),
     path('edit_profile/',views.edit_profile,name='edit_profile'),
     path('logout',views.Logout,name='logout'),
@@ -56,6 +57,12 @@ urlpatterns = [
     path('my_orders/', views.my_orders, name='my_orders'),
     path('order_details/<int:order_id>/', views.order_detail_view, name='order_details'),
 
+    path('view_users/', views.view_users, name='view_users'),
+
+    path('farmer/orders/', views.farmer_orders, name='farmer_orders'),
+    path('farmer/update_status/<int:item_id>/', views.update_order_status, name='update_order_status'),
+
+
 
     # path('payment_options/', views.payment_options, name='payment_options'),
     # path('payment_success/', views.payment_success, name='payment_success'),
@@ -67,7 +74,8 @@ urlpatterns = [
     path('farmer_orders',views.farmer_orders,name='farmer_orders'),
     path('farmer_profile',views.farmer_profile,name='farmer_profile'),
     path('farmer_wallet',views.farmer_wallet,name='farmer_wallet'),
-    path('category/<str:category_name>/', views.category_products, name='category_products'),
+    
+    
 ]
 
 if settings.DEBUG:

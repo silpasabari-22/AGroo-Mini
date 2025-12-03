@@ -100,13 +100,16 @@
                 </div>
                 <div class="d-flex align-items-center">
                     <div class="dropdown me-3">
-                        <button class="btn btn-success dropdown-toggle rounded-pill px-4" type="button" data-bs-toggle="dropdown">
+                        <!-- <button class="btn btn-success dropdown-toggle rounded-pill px-4" type="button" data-bs-toggle="dropdown">
                             Register
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'register_user' %}">As Customer</a></li>
-                            <li><a class="dropdown-item" href="{% url 'regist' %}">As Farmer</a></li>
-                        </ul>
+                        </button> -->
+                        <!-- <ul class="dropdown-menu"> -->
+                        
+                            <a class="dropdown-item" href="{% url 'register_user' %}"><button class="btn btn-success  rounded-pill px-4" type="button">
+                            Register
+                        </button></a>
+                        
+                        
                     </div>
                     <a href="{% url 'login' %}" class="btn btn-warning rounded-pill py-2 px-4 fw-bold">Login</a>
                 </div>

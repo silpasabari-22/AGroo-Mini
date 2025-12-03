@@ -94,6 +94,46 @@
         input[type="submit"]:hover {
             background-color: #219150;
         }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-submit,
+        .btn-back {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s ease;
+            text-decoration: none;
+        }
+
+        /* Submit button */
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #219150;
+        }
+
+        /* Back button */
+        .btn-back {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #1a242f;
+        }
     </style>
 </head>
 
@@ -128,38 +168,51 @@
         <label for="price">Price</label>
         <input type="number" name="price" id="price" placeholder="Enter price">
 
-        <input type="submit" value="Submit">
+        <div class="btn-row">
+            <input type="submit" value="Submit" class="btn-submit">
+            <a href="{% url 'farmer_home2' %}" class="btn-back">Back</a>
+        </div>
+
+
     </form>
 
 
+
     <style>
-    table {
-        width: 100%;
-        border-collapse: collapse; /* ✅ removes double borders */
-        margin-top: 20px;
-        font-family: Arial, sans-serif;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            /* ✅ removes double borders */
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
 
-    th, td {
-        border: 1px solid #333;  /* table borders */
-        padding: 10px;           /* spacing */
-        text-align: left;
-    }
+        th,
+        td {
+            border: 1px solid #333;
+            /* table borders */
+            padding: 10px;
+            /* spacing */
+            text-align: left;
+        }
 
-    th {
-        background-color: #4CAF50; /* header color */
-        color: white;
-        font-weight: bold;
-    }
+        th {
+            background-color: #4CAF50;
+            /* header color */
+            color: white;
+            font-weight: bold;
+        }
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* zebra rows */
-    }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* zebra rows */
+        }
 
-    tr:hover {
-        background-color: #ddd; /* hover effect */
-    }
-</style>
+        tr:hover {
+            background-color: #ddd;
+            /* hover effect */
+        }
+    </style>
 
 
     <table>
@@ -173,7 +226,7 @@
         {% for i in a %}
         <tr>
             <td>{{i.product_name}}</td>
-            <td>{{i.quantity}}</td> 
+            <td>{{i.quantity}}</td>
             <td>{{i.price}}</td>
             <td>{{i.product_image}}</td>
         </tr>

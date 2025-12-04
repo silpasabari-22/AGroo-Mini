@@ -228,7 +228,14 @@
             <td>{{i.product_name}}</td>
             <td>{{i.quantity}}</td>
             <td>{{i.price}}</td>
-            <td>{{i.product_image}}</td>
+            <td>
+                {% if i.product_image %}
+                <img src="{{ i.product_image.url }}" width="80" height="80"
+                    style="object-fit: cover; border-radius: 5px;">
+                {% else %}
+                <span>No Image</span>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>

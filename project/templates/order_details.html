@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load cart_filter %}
+{% load cart_filter %}
 
 <head>
     <meta charset="UTF-8">
@@ -9,63 +9,112 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Green Navbar */
+        .navbar {
+            background: #28a745 !important;
+            padding: 12px 20px;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-size: 16px;
+            margin-left: 15px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #e6ffe6 !important;
+        }
+
+        /* Styled Summary Box */
+        .summary-box {
+            background: #e9ffe9;
+            border-left: 5px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .summary-box h5 {
+            font-weight: bold;
+            color: #155724;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
 
-<div class="container py-5">
+    <!-- ===================== NAVBAR ===================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow">
+        <a class="navbar-brand" href="#">My Orders</a>
 
-    <h2 class="mb-4 text-center">Order Details</h2>
- <a href="{% url 'my_orders' %}">back</a>
+        <div class="ms-auto">
+            <a href="{% url 'user' %}" class="nav-link d-inline-block">Home</a>
+            <a href="{% url 'my_orders' %}" class="nav-link d-inline-block">Back</a>
+        </div>
+    </nav>
 
+    <div class="container py-5">
 
-    <!-- Order Information -->
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <h5 class="card-title"></h5>
+        <h2 class="mb-4 text-center">Order Details</h2>
+
+        <!-- Order Information -->
+        <div class="summary-box shadow mb-4">
+            <h5>Order ID: {{ order.id }}</h5>
             <p><strong>Date:</strong> {{ order.date }}</p>
-            <p><strong>Status:</strong>
-                <span class="badge bg-success">{{ order.status }}</span>
-            </p>
             <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
         </div>
-    </div>
 
-    <!-- Order Items -->
-    {% for item in order_items %}
-    <div class="card shadow mb-4">
-        <div class="card-body">
+        <!-- Order Items -->
+        {% for item in order_items %}
+        <div class="card shadow mb-4">
+            <div class="card-body">
 
-            <div class="row">
+                <div class="row">
 
-                <!-- Product Image -->
-                <div class="col-md-4 text-center">
-                    {% if item.product_id.product_image %}
-                    <img src="{{ item.product_id.product_image.url }}" 
-                         class="img-fluid rounded"
-                         style="max-height: 200px; object-fit: contain;">
-                    {% else %}
-                    <img src="https://via.placeholder.com/200" class="img-fluid rounded">
-                    {% endif %}
-                </div>
+                    <!-- Product Image -->
+                    <div class="col-md-4 text-center">
+                        {% if item.product_id.product_image %}
+                        <img src="{{ item.product_id.product_image.url }}" class="img-fluid rounded"
+                            style="max-height: 200px; object-fit: contain;">
+                        {% else %}
+                        <img src="https://via.placeholder.com/200" class="img-fluid rounded">
+                        {% endif %}
+                    </div>
 
-                <!-- Product Info -->
-                <div class="col-md-8">
-                    <h5>{{ item.product_id.product_name }}</h5>
-                    <p>{{ item.product_id.description|truncatewords:25 }}</p>
+                    <!-- Product Info -->
+                    <div class="col-md-8">
+                        <span class="badge 
+                            {% if item.status == 'Delivered' %} bg-success 
+                            {% elif item.status == 'Cancelled' %} bg-danger 
+                            {% else %} bg-warning text-dark 
+                            {% endif %} 
+                            float-end">
+                            {{ item.status }}
+                        </span>
 
-                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                    <p><strong>Price:</strong> ₹{{ item.product_id.price }}</p>
-                    <p><strong>Subtotal:</strong> ₹{{ item.quantity|multiply:item.product_id.price }}</p>
+                        <h5>{{ item.product_id.product_name }}</h5>
+                        <p>{{ item.product_id.description|truncatewords:25 }}</p>
+
+                        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                        <p><strong>Price:</strong> ₹{{ item.product_id.price }}</p>
+                        <p><strong>Subtotal:</strong> ₹{{ item.quantity|multiply:item.product_id.price }}</p>
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
 
-</div>
+    </div>
 
 </body>
+
 </html>

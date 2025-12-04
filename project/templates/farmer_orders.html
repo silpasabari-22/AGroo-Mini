@@ -44,7 +44,7 @@
                     <td>{{ item.order.date }}</td>
 
                     <td>
-                        <span class="badge bg-info text-dark">{{ item.order.status }}</span>
+                        <span class="badge bg-info text-dark">{{ item.status }}</span>
                     </td>
 
                     <td>
@@ -52,15 +52,16 @@
                             {% csrf_token %}
 
                             <select name="status" class="form-select form-select-sm mb-2">
-                                <option value="Pending" {% if item.order.status == "Pending" %}selected{% endif %}>Pending</option>
+                                <option selected disabled>{{item.status}}</option>
+                                <option value="Pending" >Pending</option>
 
-                                <option value="Processing" {% if item.order.status == "Processing" %}selected{% endif %}>Processing</option>
+                                <option value="Processing" >Processing</option>
 
-                                <option value="Shipped" {% if item.order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                                <option value="Shipped" >Shipped</option>
 
-                                <option value="Delivered" {% if item.order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+                                <option value="Delivered" >Delivered</option>
 
-                                <option value="Cancelled" {% if item.order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                                <option value="Cancelled" >Cancelled</option>
                             </select>
 
                             <button class="btn btn-primary btn-sm w-100">Update</button>

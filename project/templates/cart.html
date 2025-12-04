@@ -14,7 +14,7 @@
             margin: 0;
         }
 
-        /* ---------------- NAVBAR ---------------- */
+        /* NAVBAR */
         .navbar {
             width: 100%;
             background: #3b82f6;
@@ -26,7 +26,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            
         }
 
         .navbar .logo {
@@ -57,14 +56,13 @@
             background: #1e40af;
         }
 
-        /* ---------------- PAGE HEADING ---------------- */
         h2 {
             text-align: center;
             margin: 25px 0;
             color: #333;
         }
 
-        /* ---------------- CART TABLE ---------------- */
+        /* TABLE */
         table {
             width: 90%;
             margin: auto;
@@ -103,7 +101,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
         }
 
         .qty-btn:hover {
@@ -123,7 +120,7 @@
             background: darkred;
         }
 
-        /* ---------------- TOTAL SECTION ---------------- */
+        /* TOTAL BOX */
         .total-box {
             width: 90%;
             margin: 30px auto;
@@ -160,20 +157,20 @@
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- NAVBAR -->
     <div class="navbar">
         <div class="logo">MyShop</div>
         <ul>
             <li><a href="{% url 'user' %}">Home</a></li>
             <li><a href="{% url 'cartview' %}">Cart</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
-
         </ul>
     </div>
 
-    <!-- ================= PAGE HEADING ================= -->
     <h2>Your Cart Items</h2>
 
+    <!-- CART ITEMS -->
+    {% if a %}
     <table>
         <tr>
             <th>Image</th>
@@ -187,11 +184,8 @@
         {% for item in a %}
         <tr>
             <td><img class="img" src="{{ item.product_id.product_image.url }}" alt=""></td>
-
             <td>{{ item.product_id.product_name }}</td>
-
             <td>₹{{ item.product_id.price }}</td>
-
             <td>₹{{ item.price }}</td>
 
             <td>
@@ -215,7 +209,15 @@
         {% endfor %}
     </table>
 
-    <!-- ================= TOTAL BOX ================= -->
+    {% else %}
+    <!-- EMPTY CART MESSAGE -->
+    <p style="text-align: center; font-size: 18px; color: #555; margin-top: 40px;">
+        Your cart is empty. <a href="{% url 'user' %}">Shop now!</a>
+    </p>
+    {% endif %}
+
+    <!-- TOTAL BOX -->
+    {% if a %}
     <div class="total-box">
         <strong>Grand Total:</strong> ₹{{ grand_total }}
 
@@ -231,6 +233,7 @@
         {% endfor %}
         {% endif %}
     </div>
+    {% endif %}
 
 </body>
 

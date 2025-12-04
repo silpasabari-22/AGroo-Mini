@@ -195,16 +195,13 @@
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="{% url 'farmer_home2' %}" class="nav-item nav-link active">Home</a>
                     <a href="{% url 'addproduct' %}" class="nav-item nav-link">Add Product</a>
-                    <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
-                    
-                    <a href="{% url 'contact' %}" class="nav-item nav-link">Contact Us</a>
                     <a href="{% url 'view_users' %}" class="nav-item nav-link">View Users</a>
                     <a href="{% url 'farmer_orders' %}" class="nav-item nav-link">View Orders</a>
                     <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
                 </div>
 
                 <div class="d-none d-lg-flex ms-2">
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="{% url 'profile' %}">
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="{% url 'farmer_profile' %}">
                         <small class="fa fa-user text-body"></small>
                     </a>
                 </div>

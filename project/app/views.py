@@ -176,8 +176,17 @@ def edit(request, pk):
 
 
 def product_detail(request, pk):
-    product = Product.objects.get(id=pk)
-    return render(request, "view_product_detail.html", {"product": product})
+    product = get_object_or_404(Product, id=pk)
+
+    already_in_cart = False
+    if request.user.is_authenticated:
+        already_in_cart = Cart.objects.filter(user_id=request.user, product_id=product).exists()
+
+    return render(request, 'view_product_detail.html', {
+        'product': product,
+        'already_in_cart': already_in_cart
+    })
+
  
 
 
@@ -412,6 +421,20 @@ def farmer_orders(request):
     })
 
 
+# @login_required(login_url='login')
+# def update_order_status(request, item_id):
+#     if request.method == 'POST':
+#         status = request.POST.get('status')
+
+#         item = OrderItem.objects.get(id=item_id)
+
+#         # Update status in OrderItem
+#         item.order.status = status
+#         item.order.save()
+
+#     return redirect('farmer_orders')
+
+
 @login_required(login_url='login')
 def update_order_status(request, item_id):
     if request.method == 'POST':
@@ -419,9 +442,9 @@ def update_order_status(request, item_id):
 
         item = OrderItem.objects.get(id=item_id)
 
-        # Update status in OrderItem
-        item.order.status = status
-        item.order.save()
+        # Update individual product status
+        item.status = status
+        item.save()
 
     return redirect('farmer_orders')
 
@@ -432,12 +455,17 @@ def view_users(request):
     return render(request, 'view_users.html', {'users': users})
 
 
-
-
-
-
 def farmer_profile(request):
-    return render(request,'farmer_profile.html')
+    a=Customuser.objects.get(id=request.user.id)
+    return render(request,'farmer_profile.html',{'a':a})
+
+
+
+
+
+
+
+
 
 def farmer_wallet(request):
     return render(request,'farmer_wallet.html')

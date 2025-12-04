@@ -56,9 +56,8 @@ urlpatterns = [
     path('confirm_order/', views.confirm_order, name='confirm_order'),
     path('my_orders/', views.my_orders, name='my_orders'),
     path('order_details/<int:order_id>/', views.order_detail_view, name='order_details'),
-
     path('view_users/', views.view_users, name='view_users'),
-
+    path('farmer_profile/', views.farmer_profile, name='farmer_profile'),
     path('farmer/orders/', views.farmer_orders, name='farmer_orders'),
     path('farmer/update_status/<int:item_id>/', views.update_order_status, name='update_order_status'),
 

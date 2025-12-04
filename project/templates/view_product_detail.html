@@ -114,10 +114,14 @@
                 <div class="price">Price: ₹{{ product.price }}</div>
 
                 <p class="desc">{{ product.description }}</p>
-                <a href="{% url 'cart' product.id %}" class="btn-yellow">Add to cart</a>
 
-
+                {% if already_in_cart %}
+                <a href="{% url 'cartview' %}" class="btn-green">Go to Cart</a>
+                {% else %}
+                <a href="{% url 'cart' product.id %}" class="btn-yellow">Add to Cart</a>
+                {% endif %}
                 <br><br>
+
                 <a href="{% url 'user' %}" class="back-btn">← Back to Products</a>
             </div>
 
